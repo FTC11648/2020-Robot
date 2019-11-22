@@ -58,9 +58,9 @@ public class Hardware
     public DcMotor  rightDrive  = null;
     public DcMotor  centerDrive = null;
 
-    public Servo    rightArm    = null;
-    public Servo    leftArm     = null;
-    public Servo    clampIntake = null;
+  //  public Servo    rightArm    = null;
+ //   public Servo    leftArm     = null;
+ //   public Servo    clampIntake = null;
 
     public static final double MID_SERVO         =  0.5 ;
 
@@ -85,7 +85,7 @@ public class Hardware
 
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
         centerDrive.setDirection(DcMotor.Direction.FORWARD); //Set so positive is right and negative is left
         // Set all motors to zero power
         leftDrive.setPower(0);
@@ -98,12 +98,12 @@ public class Hardware
         centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        leftArm  = hwMap.get(Servo.class, "left_arm");
+       /* leftArm  = hwMap.get(Servo.class, "left_arm");
         rightArm = hwMap.get(Servo.class, "right_arm");
         clampIntake = hwMap.get(Servo.class, "clamp_intake");
         leftArm.setPosition(MID_SERVO);
         rightArm.setPosition(MID_SERVO);
-        clampIntake.setPosition(MID_SERVO);
+        clampIntake.setPosition(MID_SERVO);*/
     }
  }
 

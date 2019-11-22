@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @TeleOp(name="FourBar", group="Pushbot")
-//@Disabled
+@Disabled
 public class FourBar extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -94,9 +94,9 @@ public class FourBar extends LinearOpMode {
 
         // Move both servos to new position.  Assume servos are mirror image of each other.
         armOffset = Range.clip(armOffset, -0.5, 0.5);
-        robot.leftArm.setPosition(0 + armOffset);
+        /*robot.leftArm.setPosition(0 + armOffset);
         robot.rightArm.setPosition(0 - armOffset);
-        robot.clampIntake.setPosition(0 + clampIntakeOffset);
+        robot.clampIntake.setPosition(0 + clampIntakeOffset);*/
 
         // Send telemetry message to signify robot running;
         telemetry.addData("clamp",  "Offset = %.2f", armOffset);
