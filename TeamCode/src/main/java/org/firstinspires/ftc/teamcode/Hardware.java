@@ -62,6 +62,7 @@ public class Hardware
     public BNO055IMU imu = null;
 
 
+
     /*public Servo    rightArm    = null;
     public Servo    leftArm     = null;
     public Servo    clampIntake = null;*/
@@ -102,7 +103,9 @@ public class Hardware
         centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
+
         /*leftArm  = hwMap.get(Servo.class, "left_arm");
+
         rightArm = hwMap.get(Servo.class, "right_arm");
         clampIntake = hwMap.get(Servo.class, "clamp_intake");
         leftArm.setPosition(MID_SERVO);
