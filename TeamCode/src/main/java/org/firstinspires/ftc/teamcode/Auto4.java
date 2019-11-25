@@ -175,7 +175,7 @@ public class Auto4 extends LinearOpMode {
         // restart imu movement tracking.
         resetAngle();
 
-        double k = 0.025;
+        double k = 0.001;
 
         double error = (degrees - getAngle()) * k;
 
