@@ -30,17 +30,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -69,9 +66,9 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="Pushbot")
+@Autonomous(name="Auto3", group="Pushbot")
 
-public class Auto extends LinearOpMode {
+public class Auto4 extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware robot = new Hardware();   // Use a Pushbot's hardware
@@ -127,9 +124,9 @@ public class Auto extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(DRIVE_SPEED, 31.5, 31.5, 4.0);  // S1: Forward 31.5 Inches with a 4 Sec timeout
-        rotate(-104.15);
+        rotate(104.15);
         encoderDrive(DRIVE_SPEED, 63.42, 63.42, 4.0);  // S3: Forward 63.42 Inches with a 4 Sec timeout
-        rotate(-14.15); // Turn right 14.15g
+        rotate(14.15); // Turn right 14.15g
 
        /* robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
         robot.rightClaw.setPosition(0.0);
