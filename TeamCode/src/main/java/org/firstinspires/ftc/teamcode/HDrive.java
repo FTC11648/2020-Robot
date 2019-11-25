@@ -34,8 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
-
 /**
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
  * All device access is managed through the HardwarePushbot class.
@@ -55,7 +53,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 public class HDrive extends LinearOpMode {
 
     /* Declare OpMode members. */
-    Hardware        robot           = new Hardware();          // Use hardware
+    Hardware robot = new Hardware(); // Use hardware
 
 
     @Override
@@ -116,7 +114,7 @@ public class HDrive extends LinearOpMode {
             telemetry.update();
 
             // Pace this loop so jaw action is reasonable speed.
-            sleep(50);
+            //sleep(50);
         }
     }
 }
