@@ -1,21 +1,13 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-//This opmode will drag the foundation into the build zone if you are on the BLUE team
-
-@Autonomous
-public class FoundationBlue extends LinearOpMode {
-    Hardware robot = new Hardware(); // Use hardware
+public class RobotMover extends LinearOpMode{
+    Hardware robot = new Hardware();
+    Gyro gyro = new Gyro();
     private ElapsedTime     runtime = new ElapsedTime();
-    public Orientation lastAngles = new Orientation();
-    public double globalAngle;
 
     static final double     COUNTS_PER_MOTOR_REV    = 510 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
@@ -23,66 +15,23 @@ public class FoundationBlue extends LinearOpMode {
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415926535897932384626433832795);
 
-    @Override
-    public void runOpMode() {
+    RobotMover() {
         robot.init(hardwareMap);
-
-        robot.leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.centerDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        telemetry.addData("Status: ", "Waiting for start");
-        telemetry.update();
-
-        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.centerDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-
-        //Do the course
-        encoderDrive(31.5, 31.5, 0, 20);
-        //Grab foundation
-        encoderDrive(-31.5, -31.5, 0, 20);
-        encoderDrive(0, 0, 30, 20);
     }
 
-    private void resetAngle() {
-        lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        globalAngle = 0;
-
-    }
-
-    private double getAngle() {
-        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
-
-        globalAngle += deltaAngle;
-
-        lastAngles = angles;
-
-        return globalAngle;
+    public void runOpMode() {
+        //hi
     }
 
     public void rotate(double degrees) {
         double  leftPower, rightPower;
 
         // restart imu movement tracking.
-        resetAngle();
+        gyro.resetAngle();
 
         double k = 0.025;
 
-        double error = (degrees - getAngle())*k;
+        double error = (degrees - gyro.getAngle())*k;
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
         //if (degrees < 0) {
@@ -115,9 +64,8 @@ public class FoundationBlue extends LinearOpMode {
 
         // left turn.
 
-        runtime.reset();
-        while (opModeIsActive() && Math.abs(getAngle()-degrees) <= 1.5) {
-            error = (degrees - getAngle())*k;
+        while (opModeIsActive() && Math.abs(gyro.getAngle()-degrees) <= 1.5) {
+            error = (degrees - gyro.getAngle())*k;
 
             leftPower = -error;
             rightPower = error;
@@ -127,7 +75,7 @@ public class FoundationBlue extends LinearOpMode {
             robot.rightDrive.setPower(rightPower);
             robot.rightDrive.setPower(rightPower);
 
-            telemetry.addData("Angle: ", "%7f", getAngle());
+            telemetry.addData("Angle: ", "%7f", gyro.getAngle());
             telemetry.addData("Power: ", "%7f", error);
             telemetry.update();
         }
@@ -137,17 +85,17 @@ public class FoundationBlue extends LinearOpMode {
         robot.leftDrive.setPower(0);
         robot.rightDrive.setPower(0);
         robot.rightDrive.setPower(0);
-        telemetry.addData("Angle: ", "%7f", getAngle()); telemetry.update();
+        telemetry.addData("Angle: ", "%7f", gyro.getAngle()); telemetry.update();
 
         // wait for rotation to stop.
         sleep(1000);
 
         // reset angle tracking on new heading.
-        resetAngle();
+        gyro.resetAngle();
     }
 
-    private void encoderDrive(double leftInches, double rightInches, double centerInches,
-                             double timeoutS) {
+    public void encoderDrive(double leftInches, double rightInches, double centerInches,
+                              double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
         int newCenterTarget;
