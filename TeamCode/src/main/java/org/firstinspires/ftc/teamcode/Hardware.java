@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
 
 /**
  * This is NOT an opmode.
@@ -57,6 +59,8 @@ public class Hardware
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
     public DcMotor  centerDrive = null;
+    public BNO055IMU imu = null;
+
 
     /*public Servo    rightArm    = null;
     public Servo    leftArm     = null;
@@ -104,6 +108,14 @@ public class Hardware
         leftArm.setPosition(MID_SERVO);
         rightArm.setPosition(MID_SERVO);
         clampIntake.setPosition(MID_SERVO);*/
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        imu.initialize(parameters);
     }
  }
 
