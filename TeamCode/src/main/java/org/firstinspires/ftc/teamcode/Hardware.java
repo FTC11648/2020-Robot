@@ -87,11 +87,11 @@ public class Hardware
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
         centerDrive = hwMap.get(DcMotor.class, "center_drive");
+        imu = hwMap.get(BNO055IMU.class, "imu");
 
-
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        centerDrive.setDirection(DcMotor.Direction.FORWARD); //Set so positive is right and negative is left
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        centerDrive.setDirection(DcMotor.Direction.REVERSE); //Set so positive is right and negative is left
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
