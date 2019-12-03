@@ -72,7 +72,7 @@ public class Fundation_Red extends LinearOpMode {
     Hardware robot = new Hardware();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double COUNTS_PER_MOTOR_REV = 560;    // eg: TETRIX Motor Encoder
+    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -119,7 +119,7 @@ public class Fundation_Red extends LinearOpMode {
 
         //robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
         //robot.rightClaw.setPosition(0.0);
-        sleep(1000);     // pause for servos to move
+        //sleep(1000);     // pause for servos to move
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -135,7 +135,7 @@ public class Fundation_Red extends LinearOpMode {
      */
     public void encoderDrive(double speed,
                              double leftInches, double rightInches,
-                             double timeoutS,double centerInches) {
+                             double timeoutS, double centerInches) {
         int newLeftTarget;
         int newRightTarget;
         int newCenterTarget;
@@ -146,7 +146,7 @@ public class Fundation_Red extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             newLeftTarget = robot.leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
             newRightTarget = robot.rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-            newCenterTarget=robot.centerDrive.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
+            newCenterTarget = robot.centerDrive.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
 
             robot.leftDrive.setTargetPosition(newLeftTarget);
             robot.rightDrive.setTargetPosition(newRightTarget);
@@ -172,7 +172,7 @@ public class Fundation_Red extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy()&& robot.centerDrive.isBusy())) {
+                    (robot.leftDrive.isBusy() || robot.rightDrive.isBusy()|| robot.centerDrive.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);

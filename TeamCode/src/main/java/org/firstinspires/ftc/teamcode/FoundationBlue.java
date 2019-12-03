@@ -17,7 +17,7 @@ public class FoundationBlue extends LinearOpMode {
     public Orientation lastAngles = new Orientation();
     public double globalAngle;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 510 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -45,10 +45,10 @@ public class FoundationBlue extends LinearOpMode {
         waitForStart();
 
         //Do the course
-        encoderDrive(31.5, 31.5, 0, 20);
+        encoderDrive(0.6, 31.5, 31.5, 5, 0);
         //Grab foundation
-        encoderDrive(-31.5, -31.5, 0, 20);
-        encoderDrive(0, 0, 30, 20);
+        encoderDrive(0.6, -31.5, -31.5, 5, 0);
+        encoderDrive(0.6, 0, 0, 5, 30);
     }
 
     private void resetAngle() {
@@ -146,52 +146,36 @@ public class FoundationBlue extends LinearOpMode {
         resetAngle();
     }
 
-    private void encoderDrive(double leftInches, double rightInches, double centerInches,
-                             double timeoutS) {
+    public void encoderDrive(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS, double centerInches) {
         int newLeftTarget;
         int newRightTarget;
         int newCenterTarget;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
+
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            newCenterTarget = robot.centerDrive.getCurrentPosition() + (int)(centerInches * COUNTS_PER_INCH);
+            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+            newCenterTarget = robot.centerDrive.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
 
             robot.leftDrive.setTargetPosition(newLeftTarget);
             robot.rightDrive.setTargetPosition(newRightTarget);
             robot.centerDrive.setTargetPosition(newCenterTarget);
 
+            // Turn On RUN_TO_POSITION
             robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.centerDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            int forwardError = robot.leftDrive.getCurrentPosition() - newLeftTarget;
-            int centerError = robot.centerDrive.getCurrentPosition() - newCenterTarget;
-
-            double k = 0.025;
-
-            double forwardPower = forwardError * k;
-            double centerPower = centerError * k;
-
-            robot.leftDrive.setPower(forwardPower);
-            robot.rightDrive.setPower(forwardPower);
-            robot.centerDrive.setPower(centerPower);
-
-            // Turn On RUN_TO_POSITION
 
 
             // reset the timeout time and start motion.
             runtime.reset();
-            /*robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(Math.abs(speed));
             robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(Math.abs(speed));*/
-
-
+            robot.rightDrive.setPower(Math.abs(speed));
+            robot.centerDrive.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -201,17 +185,15 @@ public class FoundationBlue extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftDrive.isBusy() || robot.rightDrive.isBusy())) {
-                forwardError = robot.leftDrive.getCurrentPosition() - newLeftTarget;
-                centerError = robot.centerDrive.getCurrentPosition() - newCenterTarget;
+                    (robot.leftDrive.isBusy() || robot.rightDrive.isBusy()|| robot.centerDrive.isBusy())) {
 
-                forwardPower = forwardError * k;
-                centerPower = centerError * k;
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
+                        robot.leftDrive.getCurrentPosition(),
+                        robot.rightDrive.getCurrentPosition(),robot.centerDrive.getCurrentPosition());
 
-                robot.leftDrive.setPower(forwardPower);
-                robot.rightDrive.setPower(forwardPower);
-                robot.centerDrive.setPower(centerPower);
-
+                telemetry.update();
             }
 
             // Stop all motion;
@@ -219,14 +201,13 @@ public class FoundationBlue extends LinearOpMode {
             robot.rightDrive.setPower(0);
             robot.centerDrive.setPower(0);
 
+
             // Turn off RUN_TO_POSITION
             robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
             //  sleep(250);   // optional pause after each move
-
-
-
         }
     }
 }
