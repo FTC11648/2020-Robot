@@ -66,7 +66,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto3", group="Pushbot")
+@Autonomous(name="Auto4", group="Pushbot")
 
 public class Auto4 extends LinearOpMode {
 
@@ -74,8 +74,8 @@ public class Auto4 extends LinearOpMode {
     Hardware robot = new Hardware();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double COUNTS_PER_MOTOR_REV = 560;    // eg: TETRIX Motor Encoder
-    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
+    static final double COUNTS_PER_MOTOR_REV = 580;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -123,10 +123,10 @@ public class Auto4 extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED, 31.5, 31.5, 4.0);  // S1: Forward 31.5 Inches with a 4 Sec timeout
-        rotate(104.15);
-        encoderDrive(DRIVE_SPEED, 63.42, 63.42, 4.0);  // S3: Forward 63.42 Inches with a 4 Sec timeout
-        rotate(14.15); // Turn right 14.15g
+        encoderDrive(DRIVE_SPEED, 49, 49 , 4.0);  // S1: Forward 31.5 Inches with a 4 Sec timeout
+        rotate(104.15/4);
+        //encoderDrive(DRIVE_SPEED, 63.42, 63.42, 4.0);  // S3: Forward 63.42 Inches with a 4 Sec timeout
+        //rotate(14.15); // Turn right 14.15g
 
        /* robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
         robot.rightClaw.setPosition(0.0);
@@ -179,20 +179,9 @@ public class Auto4 extends LinearOpMode {
 
         double error = (degrees - getAngle()) * k;
 
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        //if (degrees < 0) {
-        // turn right.
         leftPower = -error;
         rightPower = error;
-        //}
-        // else if (degrees > 0) {
-        // turn left.
-        //leftPower = -power;
-        //rightPower = power;
-        //}
-        //else return;
 
-        // set power to rotate.
         robot.leftDrive.setPower(leftPower);
         robot.rightDrive.setPower(rightPower);
 
@@ -207,8 +196,8 @@ public class Auto4 extends LinearOpMode {
         // left turn.
 
         runtime.reset();
-        while (opModeIsActive() && Math.abs(getAngle() - degrees) <= 1.5) {
-            error = (degrees - getAngle()) * k;
+        while (opModeIsActive()) {// && Math.abs(getAngle() - degrees) <= 1.5) {
+            //error = (degrees - getAngle()) * k;
 
             leftPower = -error;
             rightPower = error;
@@ -219,6 +208,7 @@ public class Auto4 extends LinearOpMode {
 
             telemetry.addData("Angle: ", "%7f", getAngle());
             telemetry.addData("Power: ", "%7f", error);
+            telemetry.addData("Test", "test");
             telemetry.update();
         }
     }
@@ -247,7 +237,6 @@ public class Auto4 extends LinearOpMode {
                 robot.rightDrive.setPower(0.001 * rightError);
                 robot.leftDrive.setPower(0.001 * leftError);
 
-
                 // reset the timeout time and start motion.
                 runtime.reset();
 
@@ -272,7 +261,10 @@ public class Auto4 extends LinearOpMode {
                     telemetry.addData("rightFrontTarget", "Running to %7d", robot.rightDrive.getTargetPosition());
                     telemetry.addData("Encoder LEFT", "Running at %7d", robot.leftDrive.getCurrentPosition());
                     telemetry.addData("Encoder RIGHT", "Running at %7d", robot.leftDrive.getCurrentPosition());
-
+                    telemetry.addData("left target", "is", robot.leftDrive.getTargetPosition());
+                    telemetry.addData("right target", "is", robot.rightDrive.getTargetPosition());
+                    telemetry.addData("test1", "test1");
+                    telemetry.update();
 
                 }
 

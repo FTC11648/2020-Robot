@@ -122,20 +122,23 @@ public class Auto3 extends LinearOpMode {
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
+
         waitForStart();
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(DRIVE_SPEED, 31.5, 31.5, 4.0);  // S1: Forward 31.5 Inches with a 4 Sec timeout
-        rotate(-104.15);
+        rotate(-104.15); // Turn right 104.15 degrees
         encoderDrive(DRIVE_SPEED, 63.42, 63.42, 4.0);  // S3: Forward 63.42 Inches with a 4 Sec timeout
-        rotate(-14.15); // Turn right 14.15g
+        rotate(-14.15); // Turn right 14.15 degrees
 
        /* robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
         robot.rightClaw.setPosition(0.0);
         sleep(1000);     // pause for servos to move*/
 
         telemetry.addData("Path", "Complete");
+        telemetry.addData("leftDrive running at", robot.leftDrive.getCurrentPosition());
+        telemetry.addData("leftDrive running at", robot.leftDrive.getTargetPosition());
         telemetry.update();
     }
 
@@ -182,20 +185,9 @@ public class Auto3 extends LinearOpMode {
 
         double error = (degrees - getAngle()) * k;
 
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        //if (degrees < 0) {
-        // turn right.
         leftPower = -error;
         rightPower = error;
-        //}
-        // else if (degrees > 0) {
-        // turn left.
-        //leftPower = -power;
-        //rightPower = power;
-        //}
-        //else return;
 
-        // set power to rotate.
         robot.leftDrive.setPower(leftPower);
         robot.rightDrive.setPower(rightPower);
 
