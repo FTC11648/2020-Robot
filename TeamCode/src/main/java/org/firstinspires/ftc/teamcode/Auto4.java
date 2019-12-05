@@ -123,8 +123,8 @@ public class Auto4 extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED, 49, 49 , 4.0);  // S1: Forward 31.5 Inches with a 4 Sec timeout
-        rotate(104.15/4);
+        //encoderDrive(DRIVE_SPEED, 49, 49 , 4.0);  // S1: Forward 31.5 Inches with a 4 Sec timeout
+        rotate(90);
         //encoderDrive(DRIVE_SPEED, 63.42, 63.42, 4.0);  // S3: Forward 63.42 Inches with a 4 Sec timeout
         //rotate(14.15); // Turn right 14.15g
 
@@ -175,7 +175,7 @@ public class Auto4 extends LinearOpMode {
         // restart imu movement tracking.
         resetAngle();
 
-        double k = 0.001;
+        double k = 0.02;
 
         double error = (degrees - getAngle()) * k;
 
@@ -197,7 +197,7 @@ public class Auto4 extends LinearOpMode {
 
         runtime.reset();
         while (opModeIsActive()) {// && Math.abs(getAngle() - degrees) <= 1.5) {
-            //error = (degrees - getAngle()) * k;
+            error = (degrees - getAngle()) * k;
 
             leftPower = -error;
             rightPower = error;
