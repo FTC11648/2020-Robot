@@ -87,17 +87,25 @@ public class Hardware
         leftDrive  = hwMap.get(DcMotor.class, "left_drive");
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
         centerDrive = hwMap.get(DcMotor.class, "center_drive");
+        imu = hwMap.get(BNO055IMU.class, "imu");
 
-
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        centerDrive.setDirection(DcMotor.Direction.FORWARD); //Set so positive is right and negative is left
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        centerDrive.setDirection(DcMotor.Direction.REVERSE); //Set so positive is right and negative is left
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
         centerDrive.setPower(0);
 
         // Set all motors to run with encoders.
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        centerDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -120,5 +128,7 @@ public class Hardware
 
         imu.initialize(parameters);
     }
- }
+
+
+}
 
