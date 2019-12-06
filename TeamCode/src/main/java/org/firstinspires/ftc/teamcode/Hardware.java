@@ -102,6 +102,14 @@ public class Hardware
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        centerDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         // Define and initialize ALL installed servos.
 
         /*leftArm  = hwMap.get(Servo.class, "left_arm");
@@ -120,5 +128,7 @@ public class Hardware
 
         imu.initialize(parameters);
     }
- }
+
+
+}
 
