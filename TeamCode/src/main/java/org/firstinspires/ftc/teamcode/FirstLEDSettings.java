@@ -27,7 +27,7 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
  * THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -50,8 +50,8 @@ import java.util.concurrent.TimeUnit;
  * Displays the first pattern upon init.
  */
 @TeleOp(name="BlinkinExample")
-@Disabled
-public class SampleRevBlinkinLedDriver extends OpMode {
+
+public class FirstLEDSettings extends OpMode {
     private boolean FInput=true;
     /*
      * Change the pattern every 10 seconds in AUTO mode.
@@ -82,7 +82,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     {
         displayKind = DisplayKind.AUTO;
 
-        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin")
+        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         pattern = RevBlinkinLedDriver.BlinkinPattern.CONFETTI;           //Here is where you can change the color of the Lights
         blinkinLedDriver.setPattern(pattern);
         display = telemetry.addData("Display Kind: ", displayKind.toString());
@@ -97,7 +97,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     {
 if((gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y)&& FInput){
     blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-    pattern = SampleRevBlinkinLedDriver.BlinkinPatter.STROBE_RED;           //Colors which change when input occurs
+    pattern = RevBlinkinLedDriver.BlinkinPattern.STROBE_RED;           //Colors which change when input occurs
 blinkinLedDriver.setPattern(pattern);
 this.FInput=false;
 }
