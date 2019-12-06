@@ -175,7 +175,9 @@ public class Auto4 extends LinearOpMode {
         // restart imu movement tracking.
         resetAngle();
 
+
         double k = 0.02;
+
 
         double error = (degrees - getAngle()) * k;
 
@@ -196,7 +198,9 @@ public class Auto4 extends LinearOpMode {
         // left turn.
 
         runtime.reset();
-        while (opModeIsActive()) {// && Math.abs(getAngle() - degrees) <= 1.5) {
+
+        while (opModeIsActive() && Math.abs(getAngle() - degrees) >= 1.5) {
+
             error = (degrees - getAngle()) * k;
 
             leftPower = -error;
