@@ -81,7 +81,7 @@ public class Auto3 extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        robotMover.encoderDrive(0.6, 31.5, 31.5, 0);
-        robotMover.rotate(90);
+        //robotMover.encoderDrive(0.6, 31.5, 31.5, 0);
+        robotMover.rotate(130);
     }
 }
