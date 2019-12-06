@@ -14,7 +14,7 @@ public class LightRGB extends OpMode {
     /*
      * Change the pattern every 10 seconds in AUTO mode.
      */
-    private final static int LED_PERIOD = 10;
+    private final static int LED_PERIOD = 1000;
 
     /*
      * Rate limit gamepad button presses to every 500ms.
@@ -41,7 +41,7 @@ public class LightRGB extends OpMode {
         displayKind = DisplayKind.AUTO;
 
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-        pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+        pattern = RevBlinkinLedDriver.BlinkinPattern.BEATS_PER_MINUTE_RAINBOW_PALETTE;
         blinkinLedDriver.setPattern(pattern);
 
         display = telemetry.addData("Display Kind: ", displayKind.toString());
@@ -58,6 +58,7 @@ public class LightRGB extends OpMode {
 
         if (displayKind == DisplayKind.AUTO) {
             doAutoDisplay();
+
         } else {
             /*
              * MANUAL mode: Nothing to do, setting the pattern as a result of a gamepad event.
