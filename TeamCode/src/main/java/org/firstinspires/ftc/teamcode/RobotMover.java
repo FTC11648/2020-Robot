@@ -21,7 +21,7 @@ public class RobotMover {
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415926535897932384626433832795);
+            (WHEEL_DIAMETER_INCHES * Math.PI);
     /* Declare OpMode members. */
 
     public RobotMover(DcMotor leftDrive, DcMotor rightDrive, DcMotor centerDrive, BNO055IMU imu)
@@ -64,40 +64,18 @@ public class RobotMover {
         // restart imu movement tracking.
         resetAngle();
 
-        double k = 0.025;
+        double k = 0.005;
 
         double error = (degrees - getAngle())*k;
 
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        //if (degrees < 0) {
-        // turn right.
         leftPower = -error;
         rightPower = error;
-        //}
-        // else if (degrees > 0) {
-        // turn left.
-        //leftPower = -power;
-        //rightPower = power;
-        //}
-        //else return;
 
         // set power to rotate.
         leftDrive.setPower(leftPower);
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
         rightDrive.setPower(rightPower);
-
-
-
-        // rotate until turn is completed.
-        /*if (degrees < 0) {
-            // On right turn we have to get off zero first.
-            while (opModeIsActive() && getAngle() == 0) {}
-
-            while (opModeIsActive() && getAngle() > degrees) {}
-        }*/
-
-        // left turn.
 
         while (Math.abs(getAngle()-degrees) >= 1) {
             error = (degrees - getAngle())*k;
@@ -116,7 +94,6 @@ public class RobotMover {
         leftDrive.setPower(0);
         rightDrive.setPower(0);
         rightDrive.setPower(0);
-
 
         // reset angle tracking on new heading.
         resetAngle();
