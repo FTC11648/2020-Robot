@@ -1,19 +1,13 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 //This opmode will drag the foundation into the build zone if you are on the BLUE team
 
-@Autonomous
-public class RedToBridge extends LinearOpMode {
+@Autonomous(name="Foundation(BLUE)", group="Pushbot")
+
+public class FoundationBLUE extends LinearOpMode {
     Hardware robot = new Hardware(); // Use hardware
     RobotMover robotMover;
 
@@ -36,8 +30,7 @@ public class RedToBridge extends LinearOpMode {
         //Do the course
         robotMover.encoderDrive(0.6, 31.5, 31.5, 0);
         //Grab foundation
-        robotMover.rotate(104.15);
-        robotMover.encoderDrive(0.6, 55, 55, 0);
-        robotMover.rotate(-14.15);
+        robotMover.encoderDrive(0.6, -31.5, -31.5, 0);
+        robotMover.encoderDrive(0.6, 0, 0, 30);
     }
 }

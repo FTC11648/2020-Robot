@@ -42,9 +42,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
-@Autonomous(name="Auto3", group="Pushbot")
+@Autonomous(name="Foundation(RED)", group="Pushbot")
 
-public class Auto4 extends LinearOpMode {
+public class FoundationRED extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware robot = new Hardware();   // Use a Pushbot's hardware
@@ -81,9 +81,9 @@ public class Auto4 extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
+
         robotMover.encoderDrive(0.6, 31.5, 31.5, 0); // forward 31.5 inches
-        robotMover.rotate(104.15); // turn left 104.15 degrees
-        robotMover.encoderDrive(0.6, 63.42, 63.42, 0); // forward 63.24 inches
-        robotMover.rotate(-14.15); // turn right 14.15 degrees
+        robotMover.encoderDrive(0.6, -31.5, -31.5, 0); // reverse 31.5 inches
+        robotMover.encoderDrive(0.6,0,0,30); // left 30
     }
 }

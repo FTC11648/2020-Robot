@@ -42,9 +42,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
-@Autonomous(name="Auto3", group="Pushbot")
+@Autonomous(name="BlockToBridgeBLUE", group="Pushbot")
 
-public class BlueToBridge extends LinearOpMode {
+public class BlockToBridgeBLUE extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware robot = new Hardware();   // Use a Pushbot's hardware
