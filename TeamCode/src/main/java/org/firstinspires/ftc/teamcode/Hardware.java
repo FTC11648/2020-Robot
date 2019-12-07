@@ -92,6 +92,7 @@ public class Hardware
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         centerDrive.setDirection(DcMotor.Direction.REVERSE); //Set so positive is right and negative is left
+
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);

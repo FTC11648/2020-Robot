@@ -34,13 +34,14 @@ public class RobotMover {
 
     }
 
-
+    //Sets global angle to 0
     private void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         globalAngle = 0;
 
     }
 
+    //Returns global angle
     private double getAngle() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
@@ -58,6 +59,43 @@ public class RobotMover {
         return globalAngle;
     }
 
+    //LIT DRIFT IN A LINE
+    public void drift() {
+        double leftPower;
+        double rightPower;
+        double centerPower;
+
+        double turn = 0.2;
+
+        double straightPower;
+        double sidePower;
+
+        resetAngle();
+
+        straightPower = Math.cos(Math.toRadians(getAngle()));
+        sidePower = Math.sin(Math.toRadians(getAngle()));
+
+        leftPower = straightPower + turn;
+        rightPower = straightPower - turn;
+        centerPower = sidePower;
+
+        if(Math.max(Math.max(leftPower, rightPower), centerPower) > 1) {
+            double scale = 1/Math.max(Math.max(leftPower, rightPower), centerPower);
+            leftPower = leftPower*scale;
+            rightPower = rightPower*scale;
+            centerPower = centerPower*scale;
+        }
+
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+        centerDrive.setPower(centerPower);
+
+        while (Math.abs(getAngle()-180) >= 1) {
+            //drift
+        }
+    }
+
+    //Rotates a certain number of degrees
     public void rotate(double degrees) {
         double  leftPower, rightPower;
 
@@ -99,6 +137,25 @@ public class RobotMover {
         resetAngle();
     }
 
+    //Returns correction value
+    private double getCorrection()
+    {
+        // The gain value determines how sensitive the correction is to direction changes.
+        double correction, angle;
+        double gain = .05;
+
+        angle = getAngle();
+
+        if (angle == 0)
+            correction = 0; // no adjustment.
+        else
+            correction = -angle; // reverse sign of angle for correction.
+
+        correction = correction * gain;
+
+        return correction;
+    }
+
     public void encoderDrive(double speed,
                              double leftInches, double rightInches,
                              double centerInches) {
@@ -106,47 +163,47 @@ public class RobotMover {
         int newRightTarget;
         int newCenterTarget;
 
-        // Ensure that the opmode is still active
+        resetAngle();
 
+        // Determine new target position
+        newLeftTarget = leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+        newRightTarget = rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+        newCenterTarget = centerDrive.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
 
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            newRightTarget = rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-            newCenterTarget = centerDrive.getCurrentPosition() + (int) (centerInches * COUNTS_PER_INCH);
+        leftDrive.setTargetPosition(newLeftTarget);
+        rightDrive.setTargetPosition(newRightTarget);
+        centerDrive.setTargetPosition(newCenterTarget);
 
-            leftDrive.setTargetPosition(newLeftTarget);
-            rightDrive.setTargetPosition(newRightTarget);
-            centerDrive.setTargetPosition(newCenterTarget);
+        // Turn On RUN_TO_POSITION
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        centerDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            // Turn On RUN_TO_POSITION
-            leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            centerDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        double correction = getCorrection();
 
+        //Start motion.
+        leftDrive.setPower(Math.abs(speed)-correction);
+        rightDrive.setPower(Math.abs(speed)+correction);
+        centerDrive.setPower(Math.abs(speed));
 
-            // reset the timeout time and start motion.
-            leftDrive.setPower(Math.abs(speed));
-            rightDrive.setPower(Math.abs(speed));
+        while((Math.abs(leftDrive.getCurrentPosition()-newLeftTarget))>2 ||
+                (Math.abs(centerDrive.getCurrentPosition()-newCenterTarget))>2 ||
+                (Math.abs(rightDrive.getCurrentPosition()-newRightTarget))>2 ) {
+            correction = getCorrection();
+
+            leftDrive.setPower(Math.abs(speed)-correction);
+            rightDrive.setPower(Math.abs(speed)+correction);
             centerDrive.setPower(Math.abs(speed));
+        }
 
-            while((Math.abs(leftDrive.getCurrentPosition()-newLeftTarget))>5 ||
-                    (Math.abs(centerDrive.getCurrentPosition()-newCenterTarget))>5 ||
-                    (Math.abs(rightDrive.getCurrentPosition()-newRightTarget))>5 ) {
-                //hi
-            }
+        // Stop all motion;
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+        centerDrive.setPower(0);
 
-            // Stop all motion;
-            leftDrive.setPower(0);
-            rightDrive.setPower(0);
-            centerDrive.setPower(0);
-
-
-            // Turn off RUN_TO_POSITION
-            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
-
+        // Turn off RUN_TO_POSITION
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        centerDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
