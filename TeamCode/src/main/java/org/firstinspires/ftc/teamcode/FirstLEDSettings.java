@@ -80,7 +80,7 @@ public class FirstLEDSettings extends OpMode {
     @Override
     public void init()
     {
-        displayKind = DisplayKind.AUTO;
+        displayKind = DisplayKind.MANUAL; //This is used to change between the Manual and the Auto mode
 
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         pattern = RevBlinkinLedDriver.BlinkinPattern.CONFETTI;           //Here is where you can change the color of the Lights
@@ -88,14 +88,14 @@ public class FirstLEDSettings extends OpMode {
         display = telemetry.addData("Display Kind: ", displayKind.toString());
         patternName = telemetry.addData("Pattern: ", pattern.toString());
 
-        ledCycleDeadline = new Deadline(LED_PERIOD, TimeUnit.SECONDS);
-        gamepadRateLimit = new Deadline(GAMEPAD_LOCKOUT, TimeUnit.MILLISECONDS);
+        //ledCycleDeadline = new Deadline(LED_PERIOD, TimeUnit.SECONDS);   This is used for Auto Mode
+        //gamepadRateLimit = new Deadline(GAMEPAD_LOCKOUT, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void loop() //Be careful with the Loop method
     {
-if((gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y)&& FInput){
+if((gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y || gamepad1.left_bumper || gamepad1.right_bumper)&& FInput){
     blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
     pattern = RevBlinkinLedDriver.BlinkinPattern.STROBE_RED;           //Colors which change when input occurs
 blinkinLedDriver.setPattern(pattern);
