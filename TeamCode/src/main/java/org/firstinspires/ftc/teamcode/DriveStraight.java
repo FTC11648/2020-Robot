@@ -27,6 +27,6 @@ public class DriveStraight extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        robotMover.encoderDrive(0.6, 48, 48, 0);
+        robotMover.drift(180, 0, 48);
     }
 }

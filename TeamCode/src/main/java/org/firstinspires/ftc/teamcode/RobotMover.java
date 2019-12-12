@@ -35,14 +35,14 @@ public class RobotMover {
     }
 
     //Sets global angle to 0
-    private void resetAngle() {
+    public void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         globalAngle = 0;
 
     }
 
     //Returns global angle
-    private double getAngle() {
+    public double getAngle() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
@@ -60,25 +60,33 @@ public class RobotMover {
     }
 
     //LIT DRIFT IN A LINE
-    public void drift() {
+    //heading is the direction the robot drifts in, in degrees
+    public void drift(double degrees, double heading, double distance) {
         double leftPower;
         double rightPower;
         double centerPower;
 
-        double turn = 0.2;
+        double arcDistance = (degrees/360)*(16.5*Math.PI);
+
+
+        double turn = arcDistance/distance;
 
         double straightPower;
         double sidePower;
 
+        //Set start angle to zero
         resetAngle();
 
-        straightPower = Math.cos(Math.toRadians(getAngle()));
-        sidePower = Math.sin(Math.toRadians(getAngle()));
+        //Do math
+        straightPower = Math.cos(Math.toRadians(getAngle()-heading));
+        sidePower = Math.sin(Math.toRadians(getAngle()-heading));
 
+        //Do more math (there are two motors on the side)
         leftPower = straightPower + turn;
         rightPower = straightPower - turn;
-        centerPower = sidePower;
+        centerPower = sidePower*2;
 
+        //Normalize or something
         if(Math.max(Math.max(leftPower, rightPower), centerPower) > 1) {
             double scale = 1/Math.max(Math.max(leftPower, rightPower), centerPower);
             leftPower = leftPower*scale;
@@ -90,9 +98,14 @@ public class RobotMover {
         rightDrive.setPower(rightPower);
         centerDrive.setPower(centerPower);
 
-        while (Math.abs(getAngle()-180) >= 1) {
-            //drift
+        while (Math.abs(getAngle()-degrees) >= 1) {
+            //This loop drifts
         }
+
+        //Stop
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+        centerDrive.setPower(0);
     }
 
     //Rotates a certain number of degrees
@@ -147,9 +160,9 @@ public class RobotMover {
         angle = getAngle();
 
         if (angle == 0)
-            correction = 0; // no adjustment.
+            correction = 0;
         else
-            correction = -angle; // reverse sign of angle for correction.
+            correction = -angle;
 
         correction = correction * gain;
 
