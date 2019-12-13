@@ -204,8 +204,8 @@ public class RobotMover {
                 (Math.abs(rightDrive.getCurrentPosition()-newRightTarget))>2 ) {
             correction = getCorrection();
 
-            leftDrive.setPower(Math.abs(speed)-correction);
-            rightDrive.setPower(Math.abs(speed)+correction);
+            leftDrive.setPower(Math.abs(speed));
+            rightDrive.setPower(Math.abs(speed));
             centerDrive.setPower(Math.abs(speed));
         }
 

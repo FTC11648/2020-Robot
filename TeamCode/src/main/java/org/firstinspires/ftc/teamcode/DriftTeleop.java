@@ -32,8 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
 //This teleop allows litty drifting
 
 @TeleOp(name="H Drive", group="Pushbot")
@@ -63,6 +61,8 @@ public class DriftTeleop extends LinearOpMode {
         robot.init(hardwareMap);
 
         robotMover = new RobotMover(robot.leftDrive, robot.rightDrive, robot.centerDrive, robot.imu);
+
+        robotMover.resetAngle();
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");
@@ -108,6 +108,7 @@ public class DriftTeleop extends LinearOpMode {
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.addData("center", "%.2f", center);
+            telemetry.addData("direction", "%.2f", driveHeading);
             telemetry.update();
         }
     }
