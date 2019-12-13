@@ -47,6 +47,7 @@ public class DriftTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //I have I lot of variables
         double left;
         double right;
         double center;
@@ -54,6 +55,9 @@ public class DriftTeleop extends LinearOpMode {
         double driveHorizontal;
         double turn;
         double driveHeading;
+        double x;
+        double y;
+        double power;
 
         // Initialize the hardware variables.
         robot.init(hardwareMap);
@@ -69,18 +73,24 @@ public class DriftTeleop extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            driveHeading = Math.atan(-gamepad1.left_stick_y/gamepad1.left_stick_x);
+            y = -gamepad1.left_stick_y;
+            x = gamepad1.left_stick_x;
+
+            //LOTS OF MATH BEGINS
+            power = Math.sqrt((x*x)+(y*y));
+
+            driveHeading = arcTan(x, y)-Math.PI/2;
             turn = gamepad1.right_stick_x;
 
-            driveVertical = Math.cos(Math.toRadians(robotMover.getAngle()-driveHeading));
-            driveHorizontal = Math.sin(Math.toRadians(robotMover.getAngle()-driveHeading));
+            driveVertical = Math.cos(Math.toRadians(robotMover.getAngle()-driveHeading))*power;
+            driveHorizontal = Math.sin(Math.toRadians(robotMover.getAngle()-driveHeading))*power;
 
-            //Do more math (there are two motors on the side)
+            //There are two motors on the side, so double center to compensate
             left = driveVertical + turn;
             right = driveVertical - turn;
             center = driveHorizontal*2;
 
-            //Normalize or something
+            //Normalize
             if(Math.max(Math.max(left, right), center) > 1) {
                 double scale = 1/Math.max(Math.max(left, right), center);
                 left = left*scale;
@@ -101,4 +111,27 @@ public class DriftTeleop extends LinearOpMode {
             telemetry.update();
         }
     }
+
+    //On a range of 0 to 2 pi
+    private double arcTan(double x, double y) {
+        if(x>0) {
+            return Math.atan(y/x);
+        }
+
+        else if(x<0) {
+            return Math.PI + Math.atan(y/x);
+        }
+
+        else if(x==0) {
+            if(y>0) {
+                return Math.PI/2;
+            }
+
+            if(y<0) {
+                return -Math.PI/2;
+            }
+        }
+        return 0;
+    }
 }
+
