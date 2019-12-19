@@ -33,6 +33,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
@@ -56,8 +57,9 @@ public class FirstLEDSettings extends OpMode {
     /*
      * Change the pattern every 10 seconds in AUTO mode.
      */
-    private final static int LED_PERIOD = 10;
-
+    private final static int LED_PERIOD = 100;
+    ElapsedTime runtime = new ElapsedTime();
+    boolean istrue=false;
     /*
      * Rate limit gamepad button presses to every 500ms.
      */
@@ -98,8 +100,14 @@ public class FirstLEDSettings extends OpMode {
 if((gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y || gamepad1.left_bumper || gamepad1.right_bumper)&& FInput){
     blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
     pattern = RevBlinkinLedDriver.BlinkinPattern.STROBE_RED;           //Colors which change when input occurs
-blinkinLedDriver.setPattern(pattern);
-this.FInput=false;
+    blinkinLedDriver.setPattern(pattern);
+    this.FInput=false;
+    runtime.reset();
+    istrue=true;
+}
+if(runtime.seconds() > 5 && istrue){
+    pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;           //change pattern when enter the deathmatch (Can change # of sunconds);
+    blinkinLedDriver.setPattern(pattern);
 }
 
         //The code below should not be in use!

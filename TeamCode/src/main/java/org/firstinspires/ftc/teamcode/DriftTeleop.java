@@ -34,7 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //This teleop allows for litty drifting
 
-@TeleOp(name="DriftTeleop", group="Pushbot")
+
+@TeleOp(name="Drift Teleop", group="Pushbot")
 //@Disabled
 public class DriftTeleop extends LinearOpMode {
 
