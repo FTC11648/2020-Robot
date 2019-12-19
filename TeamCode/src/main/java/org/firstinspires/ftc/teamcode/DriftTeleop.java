@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.util.Range;
 
 //This teleop allows litty drifting
 
-@TeleOp(name="H Drive", group="Pushbot")
+@TeleOp(name="Drift Teleop", group="Pushbot")
 //@Disabled
 public class DriftTeleop extends LinearOpMode {
 
