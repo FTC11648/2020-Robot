@@ -32,9 +32,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//This teleop allows litty drifting
+//This teleop allows for litty drifting
 
-@TeleOp(name="H Drive", group="Pushbot")
+@TeleOp(name="DriftTeleop", group="Pushbot")
 //@Disabled
 public class DriftTeleop extends LinearOpMode {
 
@@ -98,13 +98,12 @@ public class DriftTeleop extends LinearOpMode {
                 center = center*scale;
             }
 
-            // Output the safe vales to the motor drives.
+            // Output the safe vales to the motor drives
             robot.leftDrive.setPower(left);
             robot.rightDrive.setPower(right);
             robot.centerDrive.setPower(center);
 
-
-            // Send telemetry message to signify robot running;
+            // Send telemetry message to signify robot running
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.addData("center", "%.2f", center);
