@@ -47,16 +47,7 @@ public class DriftTeleop extends LinearOpMode {
     @Override
     public void runOpMode() {
         //I have I lot of variables
-        double left;
-        double right;
-        double center;
-        double driveVertical;
-        double driveHorizontal;
-        double turn;
-        double driveHeading;
-        double x;
-        double y;
-        double power;
+        double left, right, center, driveVertical, driveHorizontal, turn, driveHeading, x, y, power;
 
         // Initialize the hardware variables.
         robot.init(hardwareMap);
@@ -83,12 +74,12 @@ public class DriftTeleop extends LinearOpMode {
             driveHeading = arcTan(x, y)-Math.PI/2;
             turn = gamepad1.right_stick_x;
 
-            driveVertical = Math.cos(Math.toRadians(robotMover.getAngle()-driveHeading))*power;
-            driveHorizontal = Math.sin(Math.toRadians(robotMover.getAngle()-driveHeading))*power;
+            driveVertical = Math.cos(Math.toRadians(robotMover.getAngle()-driveHeading));
+            driveHorizontal = Math.sin(Math.toRadians(robotMover.getAngle()-driveHeading));
 
             //There are two motors on the side, so double center to compensate
-            left = driveVertical + turn;
-            right = driveVertical - turn;
+            left = driveVertical*power + turn;
+            right = driveVertical*power - turn;
             center = driveHorizontal*2;
 
             //Normalize
@@ -116,20 +107,20 @@ public class DriftTeleop extends LinearOpMode {
     //On a range of 0 to 2 pi
     private double arcTan(double x, double y) {
         if(x>0) {
-            return Math.atan(y/x);
+            return Math.atan(y/x)-Math.PI/2;
         }
 
         else if(x<0) {
-            return Math.PI + Math.atan(y/x);
+            return Math.PI/2 + Math.atan(y/x);
         }
 
         else if(x==0) {
             if(y>0) {
-                return Math.PI/2;
+                return 0;
             }
 
             if(y<0) {
-                return -Math.PI/2;
+                return -Math.PI;
             }
         }
         return 0;
