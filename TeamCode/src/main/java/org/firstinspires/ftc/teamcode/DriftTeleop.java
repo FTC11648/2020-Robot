@@ -71,7 +71,7 @@ public class DriftTeleop extends LinearOpMode {
             //LOTS OF MATH BEGINS
             power = Math.sqrt((x*x)+(y*y));
 
-            driveHeading = arcTan(x, y)-Math.PI/2;
+            driveHeading = arcTan(x, y);
             turn = gamepad1.right_stick_x;
 
             driveVertical = Math.cos(Math.toRadians(robotMover.getAngle()-driveHeading));
