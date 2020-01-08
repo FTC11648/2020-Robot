@@ -38,6 +38,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -85,19 +88,20 @@ public class FirstLEDSettings extends OpMode {
         displayKind = DisplayKind.MANUAL; //This is used to change between the Manual and the Auto mode
 
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-        pattern = RevBlinkinLedDriver.BlinkinPattern.CONFETTI;           //Here is where you can change the color of the Lights
+        pattern = RevBlinkinLedDriver.BlinkinPattern.SINELON_LAVA_PALETTE;           //Here is where you can change the color of the Lights
         blinkinLedDriver.setPattern(pattern);
         display = telemetry.addData("Display Kind: ", displayKind.toString());
         patternName = telemetry.addData("Pattern: ", pattern.toString());
 
-        //ledCycleDeadline = new Deadline(LED_PERIOD, TimeUnit.SECONDS);   This is used for Auto Mode
+        //ledCycleDeadline = new Deadline(LED_PERIOD, TimeUnit.SECONDS);
         //gamepadRateLimit = new Deadline(GAMEPAD_LOCKOUT, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void loop() //Be careful with the Loop method
     {
-if((gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y || gamepad1.left_bumper || gamepad1.right_bumper)&& FInput){
+         /*
+        if((gamepad1.a || gamepad1.b || gamepad1.x || gamepad1.y || gamepad1.left_bumper || gamepad1.right_bumper)&& FInput){  (This was a failed way for using the LED with the button presses!)
     blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
     pattern = RevBlinkinLedDriver.BlinkinPattern.STROBE_RED;           //Colors which change when input occurs
     blinkinLedDriver.setPattern(pattern);
@@ -110,8 +114,8 @@ if(runtime.seconds() > 5 && istrue){
     blinkinLedDriver.setPattern(pattern);
 }
 
-        //The code below should not be in use!
-        handleGamepad();
+       */
+        handleGamepad(); //Colors switch due to Gamepad touch
 
         if (displayKind == DisplayKind.AUTO) {
             doAutoDisplay();
@@ -136,24 +140,46 @@ if(runtime.seconds() > 5 && istrue){
      */
     protected void handleGamepad()
     {
-        if (!gamepadRateLimit.hasExpired()) {
+        /*if (!gamepadRateLimit.hasExpired()) {
             return;
-        }
+        }*/
 
-        if (gamepad1.a) {
-            setDisplayKind(DisplayKind.MANUAL);
-            gamepadRateLimit.reset();
-        } else if (gamepad1.b) {
-            setDisplayKind(DisplayKind.AUTO);
-            gamepadRateLimit.reset();
-        } else if ((displayKind == DisplayKind.MANUAL) && (gamepad1.left_bumper)) {
-            pattern = pattern.previous();
+        if (gamepad1.a && FInput) {     //This should check for input from the Gamepad and if it is detected then it will switch the colors while starting the Timer!
+            pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
             displayPattern();
-            gamepadRateLimit.reset();
-        } else if ((displayKind == DisplayKind.MANUAL) && (gamepad1.right_bumper)) {
-            pattern = pattern.next();
+            handleTimer();
+            this.FInput=false;
+           // gamepadRateLimit.reset();
+        } else if (gamepad1.b && FInput) {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
             displayPattern();
-            gamepadRateLimit.reset();
+            handleTimer();
+            this.FInput=false;
+            //gamepadRateLimit.reset();
+        } else if (gamepad1.left_bumper && FInput) {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
+           displayPattern();
+           handleTimer();
+           this.FInput=false;
+           //gamepadRateLimit.reset();
+        } else if (gamepad1.right_bumper && FInput) {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
+        displayPattern();
+        handleTimer();
+        this.FInput=false;
+        //gamepadRateLimit.reset();
+        }else if (gamepad1.x && FInput){
+            pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
+        displayPattern();
+        handleTimer();
+        this.FInput=false;
+        //gamepadRateLimit.reset();
+        }else if (gamepad1.y && FInput){
+            pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
+            displayPattern();
+            handleTimer();
+            this.FInput=false;
+          //  gamepadRateLimit.reset();
         }
     }
 
@@ -177,4 +203,21 @@ if(runtime.seconds() > 5 && istrue){
         blinkinLedDriver.setPattern(pattern);
         patternName.setValue(pattern.toString());
     }
+protected void handleTimer(){
+/*    int interval = 10000; // This is in milli seconds! (10 seconds)pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;
+           displayPattern();
+    Date timeToRun = new Date(System.currentTimeMillis() + interval);
+    Timer timer = new Timer();
+
+    timer.schedule(new TimerTask() {
+        public void run() {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.STROBE_RED;
+            displayPattern();                    //This is executed after the time has expired!
+        }
+    }, timeToRun);
+
+
+*/
 }
+}
+
